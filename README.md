@@ -1,5 +1,2 @@
-# Robot_KimSatGat
-# Robot_KimSatGat
-# Robot_KimSatGat
-# Robot_KimSatGat
-# Robot_KimSatGat
+# Robot_KimSatGat 프로젝트
+2020.9.18: 첫번째 리드미 테스트 수정. 이곳에서 변경사항 적기.
