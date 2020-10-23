@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "74668536554",
+    "firebase_url": "https://robot-kimsatgat.firebaseio.com",
+    "project_id": "robot-kimsatgat",
+    "storage_bucket": "robot-kimsatgat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:74668536554:android:93cec8e04a7a132f2b1d93",
+        "android_client_info": {
+          "package_name": "com.example.robot_kimsatgat_android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "74668536554-t5s6f20tisbkbqonbnnsrhk2t622ubct.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.robot_kimsatgat_android",
+            "certificate_hash": "48343611e0249a61d1ca5b47837c0800db8796af"
+          }
+        },
+        {
+          "client_id": "74668536554-vhrpsvv1npg57v9dpl354fpm9jnjknvi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAoHjF5RIl7pp-foTjCvxWkUlnybhlzfq8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "74668536554-vhrpsvv1npg57v9dpl354fpm9jnjknvi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
