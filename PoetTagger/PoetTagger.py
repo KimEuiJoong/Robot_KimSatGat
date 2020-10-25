@@ -104,9 +104,25 @@ class PTaggerWindow(QMainWindow,PTagger_form):
             self.file_name = path[0]
         self.setWindowTitle("PoetTagger - " + self.file_name)
         self.poet_df.columns = ['name','writer','text','cc','tags']
+        self.makeCombobox()
+    def makeCombobox(self):
         self.comboBox.clear()
-        for name in self.poet_df['name']:
-            self.comboBox.addItem(name)
+        #for name in self.poet_df['name']:
+        #    self.comboBox.addItem(name)
+        for i,row in self.poet_df.iterrows():
+            try:
+                if row['tags'] != None:
+                    tag_str = row['tags'].replace(" ","")
+                else:
+                    tag_str = "#"
+                if len(tag_str) > 1:
+                    #print(str(row['name']) + str(row['tags']) + str(len(tag_str)))
+                    self.comboBox.addItem(row['name']+" ("+row['writer']+")" + '☆')
+                else:
+                    self.comboBox.addItem(row['name']+" ("+row['writer']+")")
+            except Exception as e:
+                print(row['name']+row['writer'] + str(e))
+
 
     def choosePoet(self): 
  
@@ -144,7 +160,13 @@ class PTaggerWindow(QMainWindow,PTagger_form):
         tags_text = '#'.join(chkd_tags) 
         self.tagsEdit.setText(tags_text)
         index = self.comboBox.currentIndex()
+        old_tag_len = len(self.poet_df.iat[index,4])
+        new_tag_len = len(tags_text)
         self.poet_df.iat[index,4] = tags_text
+        if old_tag_len <= 1 and new_tag_len > 1:
+            self.makeCombobox()
+            self.comboBox.setCurrentIndex(index)
+
 
     def saveCSV(self):
         if self.file_name == "":
