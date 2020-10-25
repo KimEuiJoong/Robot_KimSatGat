@@ -158,6 +158,9 @@ class PTaggerWindow(QMainWindow,PTagger_form):
                 chkd_tags.append(tag)
         
         tags_text = '#'.join(chkd_tags) 
+        if tags_text == None or len(tags_text) <= 1:
+            tags_text = '#'
+        
         self.tagsEdit.setText(tags_text)
         index = self.comboBox.currentIndex()
         old_tag_len = len(self.poet_df.iat[index,4])
@@ -166,6 +169,10 @@ class PTaggerWindow(QMainWindow,PTagger_form):
         if old_tag_len <= 1 and new_tag_len > 1:
             self.makeCombobox()
             self.comboBox.setCurrentIndex(index)
+        elif old_tag_len > 1 and new_tag_len <= 1:
+            self.makeCombobox()
+            self.comboBox.setCurrentIndex(index)
+
 
 
     def saveCSV(self):
