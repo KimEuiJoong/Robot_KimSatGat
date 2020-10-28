@@ -4,13 +4,13 @@ from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.utils import to_categorical
 import pickle
 from sklearn.preprocessing import MultiLabelBinarizer
-import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+#import os
+#os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' #local running용(내컴에서 돌릴때)
 
 #시, 태그 데이터 불러오기
-with open('.\poems_token_MLP_v2', 'rb') as fr:
+with open('./poems_token_MLP_v2', 'rb') as fr:
     poems_token = pickle.load(fr)
-with open('.\poems_tag', 'rb') as fr:
+with open('./poems_tag', 'rb') as fr:
     poems_tag = pickle.load(fr)
 
 #멀티 레이블 정제(#이용해 리스트로 변환)
