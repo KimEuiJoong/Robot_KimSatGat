@@ -19,9 +19,23 @@ sys.path.insert(0,os.path.abspath(os.path.join(os.path.dirname(__file__),'..')))
 from django.contrib import admin
 from django.urls import path,include
 from rest_framework import routers
+from rest_framework.urlpatterns import format_suffix_patterns
 import sociallogin.views as sviews
+from poem.views import PoemViewSet
 
-urlpatterns = [
+poem_list =  PoemViewSet.as_view({
+    'post':'create'
+})
+poem = PoemViewSet.as_view({
+    'post':'create',
+    'get':'retrieve',
+    'put':'update',
+    'delete':'destroy'
+})
+
+urlpatterns = format_suffix_patterns([
     path('admin/', admin.site.urls),
     path('sociallogin/glogintoken', sviews.GLoginTokenAuth),
-]
+    path('poems',poem_list, name='poem_list'),
+    path('poems/<int:pk>',poem,name='poem'),
+])
