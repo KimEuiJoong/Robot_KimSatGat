@@ -22,6 +22,8 @@ from rest_framework import routers
 from rest_framework.urlpatterns import format_suffix_patterns
 import sociallogin.views as sviews
 from poem.views import PoemViewSet
+from poem.views import Recommend
+from poem.views import ManualSignUp
 
 poem_list =  PoemViewSet.as_view({
     'post':'create'
@@ -36,6 +38,8 @@ poem = PoemViewSet.as_view({
 urlpatterns = format_suffix_patterns([
     path('admin/', admin.site.urls),
     path('sociallogin/glogintoken', sviews.GLoginTokenAuth),
+    path('manualsignup',ManualSignUp),
     path('poems',poem_list, name='poem_list'),
     path('poems/<int:pk>',poem,name='poem'),
+    path('poems/recommended', Recommend),
 ])

@@ -26,6 +26,7 @@ SECRET_KEY = 'g0@s4&m-849(etlpqc2eru-t%*d_*0!t(7rkyl3_%emb69%24='
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
+AUTH_USER_MODEL = 'poem.User'
 
 
 # Application definition
