@@ -4,6 +4,8 @@ from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.utils import to_categorical
 import pickle
 from sklearn.preprocessing import MultiLabelBinarizer
+import sys
+sys.setrecursionlimit(10000)
 #import os
 #os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' #local running용(내컴에서 돌릴때)
 
