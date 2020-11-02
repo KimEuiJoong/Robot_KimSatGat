@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Poem,Comment
+from .models import Poem,Comment,Like
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -20,3 +20,9 @@ class PoemSerializer(serializers.ModelSerializer):
         #fields = ('title','name','content','comments','likenum')
         fields = ('id','title','writer','content','likenum')
 
+class LikeSerializer(serializers.ModelSerializer):
+    #writer = serializers.ReadOnlyField(source='owner.name')
+    class Meta:
+        model = Like
+        fields = () 
+        #read_only_fields = ('owner','poem_n')

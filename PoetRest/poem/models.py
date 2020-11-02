@@ -15,3 +15,9 @@ class Comment(models.Model):
     owner = models.ForeignKey(User,on_delete=models.CASCADE)
     poem_n = models.ForeignKey(Poem,related_name='comments',on_delete=models.CASCADE)
     content = models.TextField()
+
+class Like(models.Model):
+    owner = models.ForeignKey(User,on_delete=models.CASCADE)
+    poem_n = models.ForeignKey(Poem,on_delete=models.CASCADE)
+    class Meta:
+        unique_together=('owner','poem_n')
