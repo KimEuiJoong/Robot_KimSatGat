@@ -20,9 +20,24 @@ class PoemSerializer(serializers.ModelSerializer):
         #fields = ('title','name','content','comments','likenum')
         fields = ('id','title','writer','content','likenum')
 
+
 class LikeSerializer(serializers.ModelSerializer):
     #writer = serializers.ReadOnlyField(source='owner.name')
     class Meta:
         model = Like
         fields = () 
         #read_only_fields = ('owner','poem_n')
+
+class LikeListSerializer(serializers.ModelSerializer):
+    poem_id = serializers.ReadOnlyField(source='poem_n.id')
+    poem_title = serializers.ReadOnlyField(source='poem_n.title')
+    poem_writer = serializers.ReadOnlyField(source='poem_n.writer')
+    poem_likenum = serializers.ReadOnlyField(source='poem_n.likenum')
+    class Meta:
+        model = Like
+        fields = ('poem_id','poem_title','poem_writer','poem_likenum') 
+
+class MyPoemListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Poem
+        fields = ('id','title','likenum')

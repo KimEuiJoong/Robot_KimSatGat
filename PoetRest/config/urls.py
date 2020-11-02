@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.urls import path,include
 from rest_framework import routers
 from rest_framework.urlpatterns import format_suffix_patterns
-from poem.views import PoemViewSet,CommentViewSet,LikeViewSet,Recommend
+from poem.views import PoemViewSet,CommentViewSet,LikeViewSet,Recommend,MyLikeList,MyPoemList
 from account.views import Login
 
 poem_list =  PoemViewSet.as_view({
@@ -39,4 +39,6 @@ urlpatterns = format_suffix_patterns([
     path('poems/<int:poem_pk>/comments/<int:comment_pk>',comment, name='comment'),
     path('poems/<int:poem_pk>/like',like, name='like'),
     path('poems/recommended', Recommend),
+    path('poems/mylikelist', MyLikeList),
+    path('poems/mypoemlist', MyPoemList),
 ])

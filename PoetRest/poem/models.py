@@ -17,7 +17,13 @@ class Comment(models.Model):
     content = models.TextField()
 
 class Like(models.Model):
-    owner = models.ForeignKey(User,on_delete=models.CASCADE)
-    poem_n = models.ForeignKey(Poem,on_delete=models.CASCADE)
+    owner = models.ForeignKey(User,related_name='likes',on_delete=models.CASCADE)
+    poem_n = models.ForeignKey(Poem,related_name='likes',on_delete=models.CASCADE)
+    class Meta:
+        unique_together=('owner','poem_n')
+
+class Recommendation(models.Model):
+    owner = models.ForeignKey(User,related_name='recommendations',on_delete=models.CASCADE)
+    poem_n = models.ForeignKey(Poem,related_name='recommendations',on_delete=models.CASCADE)
     class Meta:
         unique_together=('owner','poem_n')
