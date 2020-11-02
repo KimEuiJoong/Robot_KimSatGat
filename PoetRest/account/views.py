@@ -9,10 +9,7 @@ from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser
-from rest_framework import permissions
-
-from google.oauth2 import id_token
-from google.auth.transport import requests
+from rest_framework.authtoken.models import Token
 
 from django.forms.models import model_to_dict
 from django.core import serializers
@@ -25,20 +22,26 @@ import requests
 #import aiohttp
 import json
 
-# Create your views here.
 @api_view(['POST'])
 def Login(request):
     req_data = JSONParser().parse(request)
     token = req_data['token']
-
+    name = req_data['name']
     url = "https://kapi.kakao.com/v1/user/access_token_info"
     auth = "Bearer " + token
     headers = {"Authorization": auth}
     res = requests.get(url,headers = headers)
     res_json = res.json()
-    User(userid=res_json['id'],name=token).save()
+    userid = res_json['id']
+
+    try:
+        user = User.objects.get(userid=userid)
+    except:
+        User(userid=userid,name=name).save()
+        user = User.objects.get(userid=userid)
+    satgatToken = Token.objects.get_or_create(user=user)
     try:
         res.raise_for_status()
-        return JsonResponse({"token":token},status = status.HTTP_201_CREATED)
+        return JsonResponse({"token":satgatToken[0].key},status = status.HTTP_201_CREATED)
     except Exception as e:
         return JsonResponse({"token":"failed"},status = status.HTTP_500_INTERNAL_SERVER_ERROR)    

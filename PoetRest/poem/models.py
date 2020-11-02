@@ -1,27 +1,17 @@
+import os
+import sys
+sys.path.insert(0,os.path.abspath(os.path.join(os.path.dirname(__file__),'..')))
+from django.conf import settings
 from django.db import models
-#from django.contrib.auth.models import AbstractBaseUser,BaseUserManager,PermissionsMixin
-
-# Create your models here.
-
-#class UserManager (BaseUserManager):
-#    def create_user(self, email, name):
-#        user = self.model(
-#                email = email,
-#                name = name
-#        )
-#        user.save(using=self._db)
-#        return user
-#
-#class User(AbstractBaseUser, PermissionsMixin):
-#    objects = UserManager()
-#    email = models.CharField(max_length=40,unique=True)
-#    USERNAME_FIELD = 'email'
-#    name = models.CharField(max_length=30)
+from account.models import User
 
 class Poem(models.Model):
+    owner = models.ForeignKey(User,on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
-    writer = models.CharField(max_length=30)
     content = models.TextField()
     likenum = models.IntegerField(default=0)
-    #write_user = models.ForeignKey(User,on_delete=models.CASCADE,null=True)
 
+class Comment(models.Model):
+    owner = models.ForeignKey(User,on_delete=models.CASCADE)
+    poem_n = models.ForeignKey(Poem,related_name='comments',on_delete=models.CASCADE)
+    content = models.TextField()
