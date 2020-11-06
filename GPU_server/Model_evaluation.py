@@ -148,7 +148,7 @@ def model_control(l, o, e, a, d, x, y):
     X_trains = {'t':X_train_t, 's':X_train_s}
     y_trains = [y_train_16, y_train_11]
     X_tests = {'t':X_test_t, 's':X_test_s}
-    y_tests = [y_test_16, y_test11]
+    y_tests = [y_test_16, y_test_11]
 
     #함수 입력값에 따라 파라미터 결정
     layer = layers[l]
