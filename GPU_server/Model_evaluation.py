@@ -230,3 +230,5 @@ for l in range(1):
                     for x in ['t', 's']:
                         for y in range(2):
                             model_control(l,o,e,a,d,x,y)
+                            mc = str(l) + str(o) + str(e) + str(a) + str(d) + x + str(y)
+                            print('model_code: ', mc)
