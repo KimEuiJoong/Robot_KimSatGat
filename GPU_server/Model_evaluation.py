@@ -215,7 +215,7 @@ def model_control(l, o, e, a, d, x, y):
     modelname = ('_l_' + str(layer) + '_o_' + opt + '_e_' + str(emb)
                  + '_a_' + act + '_d_' + str(drop) + '_x_' + x + '_y_' + str(tag_num)
                  + '_s_' + str(absScore) + '_' + str(score) +'.h5')
-    model.save(".\model\\" + modelname)
+    model.save("./model/" + modelname)
 
     print("절대 정확도 : " absScore)
     print("테스트 정확도 : " score)
