@@ -149,6 +149,7 @@ def model_control(l, o, e, a, d, x, y):
     y_trains = [y_train_16, y_train_11]
     X_tests = {'t':X_test_t, 's':X_test_s}
     y_tests = [y_test_16, y_test_11]
+    tagss = [tags16, tags11]
 
     #함수 입력값에 따라 파라미터 결정
     layer = layers[l]
@@ -162,6 +163,7 @@ def model_control(l, o, e, a, d, x, y):
     y_train = y_trains[y]
     X_test = X_tests[x]
     y_test = y_tests[y]
+    tags = tagss[y]
 
     #모델 생성
     model = Sequential()
