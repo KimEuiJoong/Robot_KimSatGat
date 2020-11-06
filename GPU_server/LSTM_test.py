@@ -140,4 +140,4 @@ testScore = cnt/len(y_pred)
 print("테스트 절대 정확도:", absoluteScore)
 print('테스트 정확도: ', testScore)
 
-model.save('LSTM_test_' + str(absoluteScore) + '_' + str(testScore) + '.h5')
+model.save('.\model\\LSTM_test_' + str(absoluteScore) + '_' + str(testScore) + '.h5')
