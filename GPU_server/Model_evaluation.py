@@ -166,10 +166,7 @@ def model_control(l, o, e, a, d, x, y):
     #모델 생성
     model = Sequential()
     model.add(Embedding(vocab_size, emb, input_length=max_len)) #2
-    model.add(LSTM(128, activation=act, return_sequences=True,
-                   kernel_initializer='he_normal')) #3
-    model.add(Dropout(drop))
-    model.add(LSTM(128, activation=act, return_sequences=True, kernel_initializer='he_normal')) #4
+    model.add(LSTM(128, activation=act, return_sequences=True, kernel_initializer='he_normal')) #3
     model.add(Dropout(drop))
     if(layer==10):
         model.add(LSTM(128, activation=act, return_sequences=True, kernel_initializer='he_normal'))
@@ -182,6 +179,8 @@ def model_control(l, o, e, a, d, x, y):
         model.add(Dropout(drop))
         model.add(LSTM(128, activation=act, return_sequences=True, kernel_initializer='he_normal'))
         model.add(Dropout(drop))
+    model.add(LSTM(128, activation=act, kernel_initializer='he_normal')) #4
+    model.add(Dropout(drop))
     model.add(Dense(tag_num, activation='softmax', kernel_initializer='he_normal')) #5
 
     model.compile(loss='categorical_crossentropy', optimizer=opt, metrics=['accuracy'])
