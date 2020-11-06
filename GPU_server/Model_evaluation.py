@@ -217,8 +217,8 @@ def model_control(l, o, e, a, d, x, y):
                  + '_s_' + str(absScore) + '_' + str(score) +'.h5')
     model.save("./model/" + modelname)
 
-    print("절대 정확도 : " absScore)
-    print("테스트 정확도 : " score)
+    print("절대 정확도 : ", absScore)
+    print("테스트 정확도 : ", score)
 
 
 #모델 학습 진행
