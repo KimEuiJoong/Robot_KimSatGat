@@ -137,13 +137,13 @@ def model_control(l, o, e, a, d, x, y):
     def swish(x):
         return x * tf.nn.sigmoid(x)
 
-    layers = [5, 10]
-    optimizers = ['adam', 'sgd', momentum, 'Adadelta']
-    embedding_sizes = [10, 100, 200]
-    activations = ['relu', 'tanh', 'softsign', 'elu', swish]
-    dropouts = [0.2, 0.5]
-    vocab_sizes = {'t':4247, 's':2013}
-    tag_numbers = [16, 11]
+    layers = [5, 10] #1
+    optimizers = ['adam', 'sgd', 'Adadelta', momentum] #2
+    embedding_sizes = [100, 10, 200] #1
+    activations = ['relu', 'softsign', swish, 'elu', 'tanh'] #3
+    dropouts = [0.5, 0.2] #1
+    vocab_sizes = {'t':4247, 's':2013} #2
+    tag_numbers = [16, 11] #2
     #max_len = 200
     X_trains = {'t':X_train_t, 's':X_train_s}
     y_trains = [y_train_16, y_train_11]
@@ -222,11 +222,11 @@ def model_control(l, o, e, a, d, x, y):
 
 
 #모델 학습 진행
-for l in range(2):
-    for o in range(4):
-        for e in range(3):
-            for a in range(5):
-                for d in range(2):
+for l in range(1):
+    for o in range(2):
+        for e in range(1):
+            for a in range(3):
+                for d in range(1):
                     for x in ['t', 's']:
                         for y in range(2):
                             model_control(l,o,e,a,d,x,y)
