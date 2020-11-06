@@ -190,7 +190,7 @@ def model_control(l, o, e, a, d, x, y):
     model.summary() #화면에 출력
 
     tnan = TerminateOnNaN()
-    es = EarlyStopping(monitor='val_loss', mode='min', min_delta=0,  verbose=1, patience=100) #과적합방지
+    es = EarlyStopping(monitor='val_loss', mode='min', min_delta=0,  verbose=1, patience=50) #과적합방지
 
     #학습
     model.fit(X_train, y_train, batch_size=32, epochs=200, verbose=1,
@@ -211,8 +211,8 @@ def model_control(l, o, e, a, d, x, y):
     if opt == momentum:
         opt = 'momentum'
     if act == swish:
-        act == 'swish'
-    modelname = ('_l_' + str(layer) + '_o_' + opt + '_e_' + str(emb)
+        act = 'swish'
+    modelname = ('model_l_' + str(layer) + '_o_' + opt + '_e_' + str(emb)
                  + '_a_' + act + '_d_' + str(drop) + '_x_' + x + '_y_' + str(tag_num)
                  + '_s_' + str(absScore) + '_' + str(score) +'.h5')
     model.save("./model/" + modelname)
