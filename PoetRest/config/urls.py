@@ -27,6 +27,7 @@ comment = CommentViewSet.as_view({
 })
 like =  LikeViewSet.as_view({
     'post':'create',
+    'get':'retrieve',
     'delete':'destroy'
 })
 

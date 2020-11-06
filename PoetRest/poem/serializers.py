@@ -37,6 +37,11 @@ class LikeListSerializer(serializers.ModelSerializer):
         model = Like
         fields = ('poem_id','poem_title','poem_writer','poem_likenum') 
 
+class LikeNumSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Poem
+        fields = ('likenum',)
+
 class MyPoemListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Poem

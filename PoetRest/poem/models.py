@@ -27,3 +27,4 @@ class Recommendation(models.Model):
     poem_n = models.ForeignKey(Poem,related_name='recommendations',on_delete=models.CASCADE)
     class Meta:
         unique_together=('owner','poem_n')
+

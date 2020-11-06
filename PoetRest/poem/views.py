@@ -14,11 +14,12 @@ from rest_framework.decorators import api_view
 from rest_framework.parsers import JSONParser
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import APIException
+from rest_framework.response import Response
 
 from google.oauth2 import id_token
 from google.auth.transport import requests
 
-from .serializers import PoemSerializer,CommentSerializer,LikeSerializer,LikeListSerializer,MyPoemListSerializer
+from .serializers import PoemSerializer,CommentSerializer,LikeSerializer,LikeListSerializer,MyPoemListSerializer,LikeNumSerializer
 from django.forms.models import model_to_dict
 from django.core import serializers
 
@@ -61,6 +62,10 @@ class LikeViewSet(viewsets.ModelViewSet):
         obj = get_object_or_404(queryset,owner=self.request.user,poem_n=Poem.objects.get(id=self.kwargs['poem_pk']))
         self.check_object_permissions(self.request, obj)
         return obj
+    def retrieve(self, retrieve, *args, **kwargs):
+        liked_poem = Poem.objects.get(id=self.kwargs['poem_pk'])
+        serializer = LikeNumSerializer(liked_poem)
+        return Response(serializer.data)
 
     def perform_create(self, serializer):
         try:
@@ -78,7 +83,6 @@ class LikeViewSet(viewsets.ModelViewSet):
         instance.delete()
         liked_poem.likenum = F('likenum')-1
         liked_poem.save()
-
 
 
 @api_view(['GET'])
