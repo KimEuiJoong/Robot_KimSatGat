@@ -5,9 +5,9 @@ from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.utils import to_categorical
 
-with open('C:\DeepLearing\Robot_KSG\RNN\poems_token_ckonlpy', 'rb') as fr:
+with open('poems_token_ckonlpy', 'rb') as fr:
     poems_token = pickle.load(fr) #series-list
-with open ('C:\DeepLearing\Robot_KSG\RNN\poems_tag_16', 'rb') as fr:
+with open ('poems_tag_16', 'rb') as fr:
     poems_tag = pickle.load(fr) #series
 
 poems_tag = poems_tag.drop(poems_tag[poems_tag=='불용'].index)
