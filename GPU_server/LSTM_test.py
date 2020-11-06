@@ -86,7 +86,7 @@ y_train = to_categorical(y_train_int, len(tags))
 y_test = to_categorical(y_test_int, len(tags))
 
 #모델 설계 + 학습 + 평가 +저장
-from tensorflow.kervas.models import Sequential
+from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Embedding, Dense, LSTM, Dropout
 from tensorflow.keras import initializers
 from tensorflow.keras.callbacks import TerminateOnNaN, EarlyStopping
