@@ -76,4 +76,4 @@ model.add(Dense(units=16, activation='sigmoid'))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 model.fit(X_train, Y_train, batch_size=128, epochs=100, verbose=0, validation_split=0.1)
 
-model.save('.\model\\' + 'MLP_model_v0.1.h5')
+model.save('./model/' + 'MLP_model_v0.1.h5')
