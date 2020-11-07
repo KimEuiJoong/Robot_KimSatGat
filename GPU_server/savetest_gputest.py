@@ -9,7 +9,7 @@ sys.setrecursionlimit(10000)
 import tensorflow as tf
 tf.debugging.set_log_device_placement(True)
 
-with tf.device('/device:XLA_GPU:0'):
+with tf.device('/XLA_GPU:0'):
     #시, 태그 데이터 불러오기
     with open('./poems_token_MLP_v2', 'rb') as fr:
         poems_token = pickle.load(fr)
