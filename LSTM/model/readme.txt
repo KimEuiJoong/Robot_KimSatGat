@@ -1,0 +1,1 @@
+Model_evaluation.py 실행시 모델이 저장되는 곳입니다
