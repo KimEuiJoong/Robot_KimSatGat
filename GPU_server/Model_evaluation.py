@@ -7,7 +7,7 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.utils import to_categorical
 tf.debugging.set_log_device_placement(True)
 
-with tf.device('/device:XLA_GPU:0'):
+with tf.device('/device:GPU:0'):
     #시, 태그 불러오기(X1,X2,y1,y2)
     with open('poems_token_ckonlpy', 'rb') as fr:
         poems_token = pickle.load(fr) #series-list
