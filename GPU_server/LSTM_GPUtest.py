@@ -5,7 +5,7 @@ from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.utils import to_categorical
 import tensorflow as tf
-tf.debugging.set_log_device_placement(True)
+#tf.debugging.set_log_device_placement(True)
 
 with tf.device('/device:GPU:0'):
     with open('poems_token_ckonlpy', 'rb') as fr:
