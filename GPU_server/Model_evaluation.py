@@ -196,7 +196,7 @@ with tf.device('/device:GPU:0'):
         es = EarlyStopping(monitor='val_loss', mode='min', min_delta=0,  verbose=1, patience=20) #과적합방지
 
         #학습
-        model.fit(X_train, y_train, batch_size=32, epochs=200, verbose=1,
+        history = model.fit(X_train, y_train, batch_size=32, epochs=200, verbose=1,
               callbacks=[es, tnan], validation_split=0.3)
 
         #평가지표 생성
@@ -219,6 +219,13 @@ with tf.device('/device:GPU:0'):
                      + '_a_' + act + '_d_' + str(drop) + '_x_' + x + '_y_' + str(tag_num)
                      + '_s_' + str(absScore) + '_' + str(score) +'.h5')
         model.save("./model2/" + modelname)
+
+        historyname = ('history_l_' + str(layer) + '_o_' + opt + '_e_' + str(emb)
+                        + '_a_' + act + '_d_' + str(drop) + '_x_' + x + '_y_' + str(tag_num)
+                        + '_s_' + str(absScore) + '_' + str(score))
+        with open("./history2/" + historyname, 'wb') as fw:
+            pickle.dump(historyname, fw)
+
 
         print("절대 정확도 : ", absScore)
         print("테스트 정확도 : ", score)
