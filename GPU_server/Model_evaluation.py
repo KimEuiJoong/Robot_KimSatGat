@@ -5,6 +5,7 @@ import tensorflow as tf
 from tensorflow.keras.preprocessing.text import Tokenizer
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.utils import to_categorical
+#tf.debugging.set_log_device_placement(True)
 
 with tf.device('/device:GPU:0'):
     #시, 태그 불러오기(X1,X2,y1,y2)
@@ -140,9 +141,9 @@ with tf.device('/device:GPU:0'):
             return x * tf.nn.sigmoid(x)
 
         layers = [5, 10] #1
-        optimizers = ['adam', 'sgd', 'Adadelta', momentum] #2
+        optimizers = ['adam', 'sgd', 'Adadelta', momentum] #4
         embedding_sizes = [100, 10, 200] #1
-        activations = ['relu', 'softsign', swish, 'elu', 'tanh'] #3
+        activations = ['relu', 'softsign', swish, 'elu', 'tanh'] #4
         dropouts = [0.5, 0.2] #1
         vocab_sizes = {'t':4247, 's':2013} #2
         tag_numbers = [16, 11] #2
@@ -192,7 +193,7 @@ with tf.device('/device:GPU:0'):
         model.summary() #화면에 출력
 
         tnan = TerminateOnNaN()
-        es = EarlyStopping(monitor='val_loss', mode='min', min_delta=0,  verbose=1, patience=50) #과적합방지
+        es = EarlyStopping(monitor='val_loss', mode='min', min_delta=0,  verbose=1, patience=20) #과적합방지
 
         #학습
         model.fit(X_train, y_train, batch_size=32, epochs=200, verbose=1,
@@ -217,7 +218,7 @@ with tf.device('/device:GPU:0'):
         modelname = ('model_l_' + str(layer) + '_o_' + opt + '_e_' + str(emb)
                      + '_a_' + act + '_d_' + str(drop) + '_x_' + x + '_y_' + str(tag_num)
                      + '_s_' + str(absScore) + '_' + str(score) +'.h5')
-        model.save("./model/" + modelname)
+        model.save("./model2/" + modelname)
 
         print("절대 정확도 : ", absScore)
         print("테스트 정확도 : ", score)
@@ -225,9 +226,9 @@ with tf.device('/device:GPU:0'):
 
     #모델 학습 진행
     for l in range(1):
-        for o in range(2):
+        for o in range(4):
             for e in range(1):
-                for a in range(3):
+                for a in range(4):
                     for d in range(1):
                         for x in ['t', 's']:
                             for y in range(2):
