@@ -5,11 +5,19 @@ from django.conf import settings
 from django.db import models
 from account.models import User
 
+class ExPoet(models.Model):
+    name = models.CharField(max_length=10,unique=True)
+
+class Tag(models.Model):
+    name = models.CharField(max_length=10,unique=True)
+
 class Poem(models.Model):
     owner = models.ForeignKey(User,on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     content = models.TextField()
     likenum = models.IntegerField(default=0)
+    expoet = models.ForeignKey(ExPoet,null=True,on_delete = models.CASCADE)
+    tag  = models.ForeignKey(Tag,null=True,on_delete = models.SET_NULL)
 
 class Comment(models.Model):
     owner = models.ForeignKey(User,on_delete=models.CASCADE)

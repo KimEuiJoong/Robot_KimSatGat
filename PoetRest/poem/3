@@ -1,0 +1,65 @@
+from rest_framework import serializers
+from .models import Poem,Comment,Like
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    writer = serializers.ReadOnlyField(source='owner.name')
+    class Meta:
+        model = Comment
+        #fields = '__all__'
+        fields = ['id','writer','content']
+        #read_only_fields = ('owner','poem_n')
+
+class PoemSerializer(serializers.ModelSerializer):
+    writer = serializers.ReadOnlyField(source='owner.name')
+    like = serializers.SerializerMethodField()
+    #comments = CommentSerializer(many=True,read_only=True)
+    #comments = serializers.PrimaryKeyRelatedField(many=True,read_only=True)
+    class Meta:
+        model = Poem
+        #fields = '__all__'
+        #fields = ('title','name','content','comments','likenum')
+        fields = ('id','title','writer','content','likenum','like')
+    def get_like(self,obj):
+        if Like.objects.filter(owner=self.CurrentUserDefault(),poem_n=obj.id).exists():
+            return True
+        else:
+            return False
+
+
+class LikeSerializer(serializers.ModelSerializer):
+    #writer = serializers.ReadOnlyField(source='owner.name')
+    class Meta:
+        model = Like
+        fields = () 
+        #read_only_fields = ('owner','poem_n')
+
+class LikeListSerializer(serializers.ModelSerializer):
+    id = serializers.ReadOnlyField(source='poem_n.id')
+    title = serializers.ReadOnlyField(source='poem_n.title')
+    writer = serializers.ReadOnlyField(source='poem_n.writer')
+    likenum = serializers.ReadOnlyField(source='poem_n.likenum')
+    like = serializers.BooleanField(default=True)
+    class Meta:
+        model = Like
+        #fields = ('poem_id','poem_title','poem_writer','poem_likenum') 
+        fields = ('id','title','writer','likenum','like') 
+
+class LikeNumSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Poem
+        fields = ('likenum',)
+
+class MyPoemListSerializer(serializers.ModelSerializer):
+    writer = serializers.ReadOnlyField(source='owner.name')
+    iflike = False
+    like = serializers.SerializerMethodField()
+    class Meta:
+        model = Poem
+        fields = ('id','writer','title','likenum','like')
+    def get_like(self,obj):
+        if Like.objects.filter(owner=obj.owner,poem_n=obj.id).exists():
+            return True
+        else:
+            return False
+
