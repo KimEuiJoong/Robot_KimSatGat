@@ -144,7 +144,7 @@ with tf.device('/device:GPU:0'):
         embedding_sizes = [100, 10, 200] #1
         activations = ['relu', 'softsign', swish, 'elu', 'tanh'] #4
         dropouts = [0.5, 0.2] #1
-        vocab_sizes = {'t':4247, 's':2013} #2
+        vocab_sizes = {'t':vocab_size_token, 's':vocab_size_str} #2
         tag_numbers = [16, 10] #2
         #max_len = 200
         X_trains = {'t':X_train_t, 's':X_train_s}
@@ -224,7 +224,6 @@ with tf.device('/device:GPU:0'):
                         + '_s_' + str(absScore) + '_' + str(score))
         with open("./history3/" + historyname, 'wb') as fw:
             pickle.dump(historyname, fw)
-
 
         print("절대 정확도 : ", absScore)
         print("테스트 정확도 : ", score)
