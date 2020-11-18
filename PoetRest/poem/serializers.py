@@ -4,6 +4,8 @@ sys.path.insert(0,os.path.abspath(os.path.join(os.path.dirname(__file__),'..')))
 from rest_framework import serializers
 from .models import Poem,Comment,Like,Recommendation,User
 
+#class SurveySerializer(serializers.ModelSerializer):
+#    class 
 class AdminPoemSerializer(serializers.ModelSerializer):
     expoet = serializers.ReadOnlyField(source='expoet.name')
     tag = serializers.ReadOnlyField(source='tag.name')
