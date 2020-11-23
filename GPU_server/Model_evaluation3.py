@@ -7,13 +7,13 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 from tensorflow.keras.utils import to_categorical
 #tf.debugging.set_log_device_placement(True)
 
-with tf.device('/device:GPU:0'):
+with tf.device('/device:CPU:0'):
     #시, 태그 불러오기(X1,X2,y1,y2)
     with open('poems_token_ckonlpy2', 'rb') as fr:
         poems_token = pickle.load(fr) #series-list
-    with open('poems_str2', 'rb') as fr:
+    with open('poems_str', 'rb') as fr:
         poems_str = pickle.load(fr) #list
-    with open ('poems_tag_16_2', 'rb') as fr:
+    with open ('poems_tag_16', 'rb') as fr:
         poems_tag_16 = pickle.load(fr) #series
     with open ('poems_tag_11_2', 'rb') as fr:
         poems_tag_11 = pickle.load(fr) #series
@@ -217,12 +217,12 @@ with tf.device('/device:GPU:0'):
         modelname = ('model_l_' + str(layer) + '_o_' + opt + '_e_' + str(emb)
                      + '_a_' + act + '_d_' + str(drop) + '_x_' + x + '_y_' + str(tag_num)
                      + '_s_' + str(absScore) + '_' + str(score) +'.h5')
-        model.save("./model3/" + modelname)
+        model.save("./model4/" + modelname)
 
         historyname = ('history_l_' + str(layer) + '_o_' + opt + '_e_' + str(emb)
                         + '_a_' + act + '_d_' + str(drop) + '_x_' + x + '_y_' + str(tag_num)
                         + '_s_' + str(absScore) + '_' + str(score))
-        with open("./history3/" + historyname, 'wb') as fw:
+        with open("./history4/" + historyname, 'wb') as fw:
             pickle.dump(historyname, fw)
 
         print("절대 정확도 : ", absScore)
