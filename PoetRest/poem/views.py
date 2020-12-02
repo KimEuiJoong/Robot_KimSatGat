@@ -26,9 +26,9 @@ from django.core import serializers
 
 from django.utils import timezone
 
-from .models import Poem,Comment,Like,Recommendation,Tag,ExPoet,Survey,Feeling,TagScore
+from .models import Poem,Comment,Like,Recommendation,Tag,ExPoet,Survey,Feeling,TagScore,PoemTags
 from .permissions import IsOwnerOrReadOnly,IsPoemOwnerOrReadOnly
-
+from .recmodel.tagging import tagging
 
 import random
 import requests
@@ -39,22 +39,45 @@ class AdminPoemViewSet(viewsets.ModelViewSet):
     queryset = Poem.objects.all()
     serializer_class = AdminPoemSerializer
     expoet = None
-    tag = None
+    tagTexts = []
     def create(self,request):
         expoetText = request.data['expoet']
-        tagText = request.data['tag']
+        self.tagTexts = request.data['tag']
         self.expoet = ExPoet.objects.get_or_create(name=expoetText)[0]
-        self.tag = Tag.objects.get_or_create(name=tagText)[0]
         return super().create(request)
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user,expoet = self.expoet,tag = self.tag)
+        poem = serializer.save(owner=self.request.user,expoet = self.expoet)
+        tags = []
+        for tagText in self.tagTexts:
+            tags.append(Tag.objects.get(name=tagText))
+        for tag in tags:
+            pt = PoemTags(poem = poem,tag = tag)
+            pt.save()
 
 class PoemViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,IsOwnerOrReadOnly)
     queryset = Poem.objects.all()
     serializer_class = PoemSerializer
+    user_tags = []
+    auto_tags = []
+    def create(self,request):
+        content = request.data['content']
+        self.user_tags = request.data['tag']
+        if len(self.user_tags) == 0:
+            self.auto_tags = tagging(content,"./poem/recmodel/model_v0.4.h5")
+        return super().create(request)
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        poem = serializer.save(owner=self.request.user)
+        tags = []
+        if len(self.user_tags) == 0:
+            for auto_tag in self.auto_tags:
+                tags.append(Tag.objects.get(name=auto_tag))
+        else:
+            for user_tag in self.user_tags:
+                tags.append(Tag.objects.get(name=user_tag))
+        for tag in tags:
+            pt = PoemTags(poem = poem,tag = tag)
+            pt.save()
 
 class CommentViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,IsPoemOwnerOrReadOnly)
@@ -111,7 +134,7 @@ class LikeViewSet(viewsets.ModelViewSet):
 def Surveyin(request):
     req_feeling = request.data["feeling"];
     feeling_obj = Feeling.objects.get(name=req_feeling)
-    date_now = timezone.now().date()
+    date_now = timezone.localtime(timezone.now()).date()
     if not Survey.objects.filter(owner = request.user,date = date_now).exists():
         Survey.objects.create(owner = request.user,feeling = feeling_obj)
         return Response(status=status.HTTP_201_CREATED)
@@ -122,26 +145,27 @@ def Surveyin(request):
 @permission_classes([IsAuthenticated])
 def LikeFeedback(request):
     FEEDBACK_SCORE = 0.1
+    date_now = timezone.localtime(timezone.now()).date()
+    survey_feeling = Survey.objects.get(owner = request.user,date = date_now).feeling
+    rec_poem = Recommendation.objects.get(owner = request.user,date = date_now).poem_n
+    rec_tags = PoemTags.objects.filter(poem=rec_poem).values_list('tag',flat=True)
+    #rec_tag = Recommendation.objects.get(owner = request.user,date = date_now).poem_n.tag
+    feeling_scores = TagScore.objects.filter(feeling = survey_feeling)
+    feedbacks = []
+    for rec_tag in rec_tags:
+        feedbacks.append(feeling_scores.get(tag=rec_tag))
+
     if request.method == 'POST':
-        date_now = timezone.now().date()
-        survey_feeling = Survey.objects.get(owner = request.user,date = date_now).feeling
-        rec_tag = Recommendation.objects.get(owner = request.user,date = date_now).poem_n.tag
-        feeling_scores = TagScore.objects.filter(feeling = survey_feeling)
         feeling_scores.update(score=F('score')-FEEDBACK_SCORE)
-        feedbacked = feeling_scores.get(tag=rec_tag)
-        feedbacked.score = F('score')+2*FEEDBACK_SCORE
-        feedbacked.save()
-        return Response(status=status.HTTP_201_CREATED)
+        for feedback in feedbacks:
+            feedback.score = F('score')+2*FEEDBACK_SCORE
+            feedback.save()
     elif request.method == 'DELETE':
-        date_now = timezone.now().date()
-        survey_feeling = Survey.objects.get(owner = request.user,date = date_now).feeling
-        rec_tag = Recommendation.objects.get(owner = request.user,date = date_now).poem_n.tag
-        feeling_scores = TagScore.objects.filter(feeling = survey_feeling)
         feeling_scores.update(score=F('score')+FEEDBACK_SCORE)
-        feedbacked = feeling_scores.get(tag=rec_tag)
-        feedbacked.score = F('score')-2*FEEDBACK_SCORE
-        feedbacked.save()
-        return Response(status=status.HTTP_201_CREATED)
+        for feedback in feedbacks:
+            feedback.score = F('score')-2*FEEDBACK_SCORE
+            feedback.save()
+    return Response(status=status.HTTP_201_CREATED)
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -156,10 +180,12 @@ def Recommend(request):
         tags = list(tagscore.values_list('tag',flat=True))
         scores = list(tagscore.values_list('score',flat=True))
         randomtag = random.choices(tags,weights=scores)[0]
-        rndtagpoems = Poem.objects.filter(tag=randomtag)
-        count = rndtagpoems.aggregate(count=Count('id'))['count']
+        rndptags = PoemTags.objects.filter(tag=randomtag)
+        rndtagpoemindexes = rndptags.values('poem')
+        count = rndtagpoemindexes.aggregate(count=Count('id'))['count']
         rand_i  = random.randrange(0,count)
-        randomPoem = rndtagpoems.all()[rand_i]
+        randomPoemIndex = rndtagpoemindexes.all()[rand_i]['poem']
+        randomPoem = Poem.objects.get(id = randomPoemIndex)
         if not Recommendation.objects.filter(owner = request.user,poem_n = randomPoem).exists():
             newRec = Recommendation(owner = request.user,poem_n = randomPoem)
             newRec.save()

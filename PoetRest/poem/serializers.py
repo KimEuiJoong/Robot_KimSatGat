@@ -2,7 +2,7 @@ import os
 import sys
 sys.path.insert(0,os.path.abspath(os.path.join(os.path.dirname(__file__),'..')))
 from rest_framework import serializers
-from .models import Poem,Comment,Like,Recommendation,User
+from .models import Poem,Comment,Like,Recommendation,User,PoemTags
 
 #class SurveySerializer(serializers.ModelSerializer):
 #    class 
@@ -43,6 +43,10 @@ class PoemSerializer(serializers.ModelSerializer):
         else:
             return obj.owner.name
     
+class PoemTagsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PoemTags
+        fields = () 
 
 class LikeSerializer(serializers.ModelSerializer):
     #writer = serializers.ReadOnlyField(source='owner.name')

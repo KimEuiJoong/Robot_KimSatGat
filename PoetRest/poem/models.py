@@ -40,12 +40,17 @@ class Poem(models.Model):
     content = models.TextField()
     likenum = models.IntegerField(default=0)
     expoet = models.ForeignKey(ExPoet,null=True,on_delete = models.CASCADE)
-    tag  = models.ForeignKey(Tag,null=True,on_delete = models.SET_NULL)
     def __str__(self):
         if self.owner.name == "어드민":
             return f"{self.id} {self.title} {self.expoet.name}"
         else:
             return f"{self.id} {self.title} {self.owner.name}"
+
+class PoemTags(models.Model):
+    poem = models.ForeignKey(Poem,related_name = 'poemtags',on_delete=models.CASCADE)
+    tag = models.ForeignKey(Tag,on_delete=models.CASCADE)
+    class Meta:
+        unique_together=('poem','tag')
 
 
 class Comment(models.Model):
