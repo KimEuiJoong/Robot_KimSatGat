@@ -49,5 +49,4 @@ urlpatterns = format_suffix_patterns([
     path('poems/mypoemlist', MyPoemList),
     path('poems/myrecommendlist', MyRecommendList),
     path('poems/admin', adminpoem,name = 'adminpoem'),
-
 ])
